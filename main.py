@@ -1,9 +1,15 @@
-from scanner.form_finder import find_forms
-from scanner.payload_injector import submit_form, is_vulnerable, XSS_PAYLOAD, SQLI_PAYLOAD
-
+import argparse
 import os
 import json
 from datetime import datetime
+from scanner.form_finder import find_forms
+from scanner.payload_injector import submit_form, is_vulnerable, XSS_PAYLOAD, SQLI_PAYLOAD
+
+def get_args():
+    parser = argparse.ArgumentParser(description="Web Vulnerability Scanner (XSS + SQLi)")
+    parser.add_argument("-u", "--url", required=True, help="Target URL to scan")
+    return parser.parse_args()
+
 
 def save_result(vuln_type, url, payload):
     report = {
@@ -28,7 +34,8 @@ def save_result(vuln_type, url, payload):
         json.dump(results, f, indent=4)
         
 if __name__ == "__main__":
-    url = input("Enter target URL: ").strip()
+    args = get_args()
+    url = args.url
     forms = find_forms(url) 
 
     for form in forms:
