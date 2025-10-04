@@ -1,1 +1,38 @@
 outputs/results.json
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.env
+.env.*
+.dist/
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+
+# Editor
+.vscode/
+.idea/
+.DS_Store
+
+# Logs and DB
+*.log
+*.sqlite3
+*.db
+
+# Go
+/bin/
+/pkg/
+/vendor/
+
+# Docker
+docker-compose.override.yml
+*.pid
+
+# Outputs
+outputs/
+screenshots/
+
