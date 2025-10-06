@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pywvs"
+version = "0.1.0"
+description = "Python wrapper and modules for Web Vulnerability Scanner"
+authors = [
+    { name = "Ali Shams", email = "ali.shamsodini1111@gmail.com" }
+]
+dependencies = [
+    "httpx",
+    "asyncio",
+    "pydantic",
+    "jinja2",
+    "PyYAML"
+]
+
+[tool.black]
+line-length = 88
+
