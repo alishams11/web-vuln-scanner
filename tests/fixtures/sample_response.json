@@ -1,0 +1,22 @@
+[
+  {
+    "url": "http://testphp.vulnweb.com/vulnerabilities/xss_r/",
+    "status": 200,
+    "headers": {
+      "Server": "Apache/2.4.18 (Ubuntu)"
+    },
+    "body_snippet": "<script>alert('XSS')</script>",
+    "duration_ms": 123.4,
+    "timestamp": "2025-06-17T12:52:49Z"
+  },
+  {
+    "url": "http://testphp.vulnweb.com/vulnerabilities/sqli/",
+    "status": 500,
+    "headers": {
+      "Server": "Apache/2.4.18 (Ubuntu)"
+    },
+    "body_snippet": "SQL syntax error",
+    "duration_ms": 98.7,
+    "timestamp": "2025-06-17T12:52:58Z"
+  }
+]
