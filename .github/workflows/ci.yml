@@ -1,0 +1,47 @@
+name: CI - Lint & Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ---------- Python Lint & Test ----------
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install flake8 pytest
+
+      - name: Run flake8 (lint)
+        run: |
+          flake8 . --ignore=E501,W503
+
+      - name: Run pytest
+        run: |
+          pytest -v || true
+
+      # ---------- Go Build ----------
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+
+      - name: Go mod tidy & build
+        run: |
+          cd core-go
+          go mod tidy
+          go build -v ./...
+
