@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
+
 def get_all_forms(url):
     try:
         response = requests.get(url, timeout=10)
@@ -10,6 +11,7 @@ def get_all_forms(url):
     except Exception as e:
         print(f"[!] Error fetching forms: {e}")
         return []
+
 
 def get_form_details(form):
     details = {}
@@ -27,6 +29,7 @@ def get_form_details(form):
     details["inputs"] = inputs
     return details
 
+
 def find_forms(url):
     forms = get_all_forms(url)
     results = []
@@ -37,7 +40,7 @@ def find_forms(url):
         print(f"    Action: {details['action']}")
         print(f"    Method: {details['method']}")
         print("    Inputs:")
-        for input_field in details['inputs']:
+        for input_field in details["inputs"]:
             print(f"        - {input_field}")
         results.append(details)
     return results
