@@ -4,15 +4,14 @@
 FROM golang:1.20 AS builder
 WORKDIR /usr/src/wvs-core
 
-# Copy go.mod and go.sum if present (avoid shell redirections in Dockerfile)
-COPY core-go/go.mod core-go/go.sum ./
-
-# Download dependencies (if go.mod present)
+# Cache modules (copy go.mod/go.sum if present)
+COPY core-go/go.* . 2>/dev/null || true
+COPY core-go/go.mod core-go/go.sum . 2>/dev/null || true
 RUN if [ -f go.mod ]; then go mod download; fi
 
 # Copy the rest of core-go and build
 COPY core-go/ ./
-# Build binary
+# Build statically (optional) - produce binary /usr/local/bin/wvs-core
 RUN CGO_ENABLED=0 go build -o /usr/local/bin/wvs-core ./... || \
     (go build -o /usr/local/bin/wvs-core ./... )
 
@@ -33,18 +32,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Copy Python packaging info and requirements (if exists)
 COPY pyproject.toml requirements.txt ./
-
 # Install Python deps (if file present)
 RUN if [ -f requirements.txt ]; then pip install --no-cache-dir -r requirements.txt; fi
+# If you prefer poetry or pyproject-based installs, change above accordingly.
 
 # Copy Python package + templates + other code
 COPY pywvs/ ./pywvs/
 COPY templates/ ./templates/
 COPY main.py ./main.py
-# copy outputs dir if exists (optional)
 COPY outputs/ ./outputs/
 
-# Copy Go binary from builder (if built)
+# Copy Go binary from builder
 COPY --from=builder /usr/local/bin/wvs-core /usr/local/bin/wvs-core
 
 # Ensure scripts are executable
@@ -54,7 +52,8 @@ RUN chmod +x /usr/local/bin/wvs-core || true
 USER wvs
 WORKDIR /home/wvs
 
-# Default entrypoint
+# Expose nothing by default (CLI)
+# Define default entrypoint: call Python package entrypoint
 ENTRYPOINT ["python", "-m", "pywvs"]
 CMD ["--help"]
 
