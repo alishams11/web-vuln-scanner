@@ -1,25 +1,38 @@
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
+from typing import List, Dict, Any
+
+REQUEST_TIMEOUT = 10
 
 
-def get_all_forms(url):
+def get_all_forms(url: str) -> List:
+    """
+    Return list of BeautifulSoup form tags (raw).
+    """
     try:
-        response = requests.get(url, timeout=10)
-        soup = BeautifulSoup(response.content, "html.parser")
+        resp = requests.get(url, timeout=REQUEST_TIMEOUT)
+        soup = BeautifulSoup(resp.content, "html.parser")
         return soup.find_all("form")
-    except Exception as e:
-        print(f"[!] Error fetching forms: {e}")
+    except Exception:
         return []
 
 
-def get_form_details(form):
-    details = {}
+def get_form_details(form) -> Dict[str, Any]:
+    """
+    Normalize a BeautifulSoup <form> tag to a dict:
+    {
+      "action": "...",
+      "method": "get|post",
+      "inputs": [{"type": "...", "name": "..."}, ...]
+    }
+    """
+    details: Dict[str, Any] = {}
     action = form.attrs.get("action", "").strip()
     method = form.attrs.get("method", "get").lower()
     inputs = []
 
-    for input_tag in form.find_all("input"):
+    for input_tag in form.find_all(["input", "textarea", "select"]):
         input_type = input_tag.attrs.get("type", "text")
         input_name = input_tag.attrs.get("name")
         inputs.append({"type": input_type, "name": input_name})
@@ -30,17 +43,17 @@ def get_form_details(form):
     return details
 
 
-def find_forms(url):
-    forms = get_all_forms(url)
-    results = []
-    print(f"[+] Found {len(forms)} form(s) in {url}")
-    for i, form in enumerate(forms, start=1):
-        details = get_form_details(form)
-        print(f"\n[#] Form #{i}")
-        print(f"    Action: {details['action']}")
-        print(f"    Method: {details['method']}")
-        print("    Inputs:")
-        for input_field in details["inputs"]:
-            print(f"        - {input_field}")
-        results.append(details)
-    return results
+def find_forms(url: str) -> List[Dict[str, Any]]:
+    """
+    Return list of dicts (form details) for given url.
+    This function is non-interactive (no printing).
+    """
+    forms = []
+    raw_forms = get_all_forms(url)
+    for f in raw_forms:
+        try:
+            forms.append(get_form_details(f))
+        except Exception:
+            # best-effort: skip broken forms
+            continue
+    return forms
