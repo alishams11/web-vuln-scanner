@@ -130,3 +130,14 @@ See `CONTRIBUTING.md` for coding style and PR guidance.
 MIT — see `LICENSE`.
 
 ---
+
+## 🚀 Run Examples
+
+### Core scanner
+```bash
+python3 -m examples.run_core
+
+Module adapters: python3 -m examples.run_modules_adapters
+Output will show HTTP debug logs and (if vulnerabilities are detected) structured JSON findings.
+
+---
