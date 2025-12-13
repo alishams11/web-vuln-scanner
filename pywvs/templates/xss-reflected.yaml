@@ -1,0 +1,17 @@
+id: xss-reflected
+name: Reflected XSS
+severity: high
+
+requests:
+  - method: GET
+    path: /
+    payloads:
+      q:
+        - "<script>alert(1)</script>"
+
+matchers:
+  - type: word
+    part: body
+    words:
+      - "<script>alert(1)</script>"
+
