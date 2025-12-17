@@ -4,9 +4,9 @@ severity: high
 
 requests:
   - method: GET
-    path: /
+    path: "/?q={{payload}}"
     payloads:
-      q:
+      payload:
         - "<script>alert(1)</script>"
 
 matchers:
