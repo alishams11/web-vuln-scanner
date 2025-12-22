@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Web Vuln Scanner Report</title>
+  <style>
+    body { font-family: Arial; margin: 40px; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ccc; padding: 8px; }
+    th { background: #eee; }
+    .high { color: red; }
+    .medium { color: orange; }
+    .low { color: green; }
+  </style>
+</head>
+<body>
+
+<h1>Web Vulnerability Scan Report</h1>
+
+<h2>Summary</h2>
+<ul>
+  <li>Total findings: {{ summary.total }}</li>
+  {% for sev, count in summary.by_severity.items() %}
+    <li>{{ sev }}: {{ count }}</li>
+  {% endfor %}
+</ul>
+
+<h2>Findings</h2>
+
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Target</th>
+    <th>Severity</th>
+    <th>Confidence</th>
+    <th>Evidence</th>
+  </tr>
+  {% for f in findings %}
+  <tr>
+    <td>{{ f.id }}</td>
+    <td>{{ f.name }}</td>
+    <td>{{ f.target }}</td>
+    <td class="{{ f.severity }}">{{ f.severity }}</td>
+    <td>{{ "%.2f"|format(f.confidence) }}</td>
+    <td><pre>{{ f.evidence }}</pre></td>
+  </tr>
+  {% endfor %}
+</table>
+
+</body>
+</html>
