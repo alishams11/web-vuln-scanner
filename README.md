@@ -141,3 +141,14 @@ Module adapters: python3 -m examples.run_modules_adapters
 Output will show HTTP debug logs and (if vulnerabilities are detected) structured JSON findings.
 
 ---
+
+## CLI Usage
+
+Run scan with template:
+
+```bash
+python3 -m pywvs scan https://example.com \
+  --template templates/xss-reflected.yaml \
+  --output report.json
+
+---

@@ -1,0 +1,21 @@
+{
+  "summary": {
+    "total": 1,
+    "by_severity": {
+      "high": 1
+    }
+  },
+  "findings": [
+    {
+      "id": "XSS-001",
+      "name": "Reflected XSS",
+      "target": "https://example.com?q=<script>",
+      "severity": "high",
+      "confidence": 0.9,
+      "description": null,
+      "evidence": {
+        "payload": "<script>alert(1)</script>"
+      }
+    }
+  ]
+}

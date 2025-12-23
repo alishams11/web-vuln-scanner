@@ -10,10 +10,9 @@ class CoreRunner:
         self.binary_path = binary_path
 
     def run(self, urls: List[str]) -> Generator[Dict[str, Any], None, None]:
-       
         if not urls:
             return
-        
+
         tmp_path = Path("/tmp/wvs_urls.txt")
         tmp_path.write_text("\n".join(urls))
 
@@ -49,3 +48,8 @@ class CoreRunner:
 
         if stderr:
             print(f"[wvs-core stderr]\n{stderr}", file=sys.stderr)
+
+
+def run_wvs_core(urls: List[str]):
+    runner = CoreRunner()
+    return runner.run(urls)
