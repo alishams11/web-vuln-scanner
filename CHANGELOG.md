@@ -1,3 +1,19 @@
+## [v0.2.0] - 2025-12-24
+### 🚀 Added
+- Template-driven scanning engine (Nuclei-like YAML templates).
+- Template scan runner orchestrating core → matcher flow.
+- Flexible matcher system (status, word, regex, body/headers).
+- Python CLI (`pywvs`) with `scan` command.
+- JSON reporter with structured findings output.
+- HTML reporter powered by Jinja2 templates.
+- Example templates (reflected XSS).
+- End-to-end scan pipeline (CLI → core → matchers → report).
+
+### 🧰 Fixed
+- Import errors and naming inconsistencies across runners and reporters.
+- Template loader path resolution.
+- Core runner integration stability.
+
 ## [v0.1.0] - 2025-11-09
 ### Added
 - Initial Go core (`wvs-core`) for banner grabbing and fingerprinting.
