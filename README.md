@@ -152,3 +152,10 @@ python3 -m pywvs scan https://example.com \
   --output report.json
 
 ---
+
+## API Scanning (Experimental)
+
+Supports replaying saved API requests (JSON/HAR planned),
+with payload injection into headers and JSON bodies.
+
+---
