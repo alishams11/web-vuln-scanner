@@ -5,6 +5,7 @@ from pywvs.templates.loaders import load_template
 from pywvs.templates.runner import TemplateScanRunner
 from pywvs.reporters.json_reporter import JSONReporter
 from pywvs.reporters.html_reporter import HTMLReporter
+from pywvs.auth.session import AuthSession
 
 
 def main() -> None:
@@ -47,6 +48,22 @@ def main() -> None:
         help="Concurrency level (default: 5)",
     )
 
+    scan_parser.add_argument(
+        "--polite",
+        action="store_true",
+        help="Enable polite scanning mode (adds delay between requests)",
+    )
+
+    scan_parser.add_argument(
+        "--user-agent",
+        help="Custom User-Agent header",
+    )
+
+    scan_parser.add_argument(
+        "--proxy",
+        help="Proxy URL (e.g. http://127.0.0.1:8080)",
+    )
+
     args = parser.parse_args()
 
     if args.command == "scan":
@@ -59,8 +76,19 @@ def main() -> None:
         # load template
         template = load_template(template_path.name)
 
+        # create auth / request session
+        auth_session = AuthSession(
+            polite=args.polite,
+            user_agent=args.user_agent,
+            proxy=args.proxy,
+        )
+
         # run scan
-        runner = TemplateScanRunner(concurrency=args.concurrency)
+        runner = TemplateScanRunner(
+            concurrency=args.concurrency,
+            auth_session=auth_session,
+        )
+
         findings = runner.run(
             template=template,
             target=args.target,
