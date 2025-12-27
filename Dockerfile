@@ -1,60 +1,57 @@
 # ------------------------
 # Stage 1: build Go core
 # ------------------------
-FROM golang:1.20 AS builder
+FROM golang:1.22 AS builder
+
 WORKDIR /usr/src/wvs-core
 
-# Copy go.mod and go.sum if present (avoid shell redirections in Dockerfile)
+# Copy go.mod / go.sum first for caching
 COPY core-go/go.mod core-go/go.sum ./
+RUN go mod download
 
-# Download dependencies (if go.mod present)
-RUN if [ -f go.mod ]; then go mod download; fi
-
-# Copy the rest of core-go and build
+# Copy source and build
 COPY core-go/ ./
-# Build binary
-RUN CGO_ENABLED=0 go build -o /usr/local/bin/wvs-core ./... || \
-    (go build -o /usr/local/bin/wvs-core ./... )
+
+# Build single static binary
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
+    go build -o /usr/local/bin/wvs-core main.go
+
 
 # ------------------------
 # Stage 2: runtime image
 # ------------------------
 FROM python:3.11-slim
+
 ENV PYTHONUNBUFFERED=1
 WORKDIR /opt/wvs
 
 # Create non-root user
 RUN groupadd -r wvs && useradd -r -g wvs -m -d /home/wvs wvs
 
-# Install system deps required for Python packages (if any)
+# System deps
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy Python packaging info and requirements (if exists)
-COPY pyproject.toml requirements.txt ./
+# Python deps
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install Python deps (if file present)
-RUN if [ -f requirements.txt ]; then pip install --no-cache-dir -r requirements.txt; fi
+# Copy Python package (includes templates)
+COPY pywvs/ pywvs/
 
-# Copy Python package + templates + other code
-COPY pywvs/ ./pywvs/
-COPY templates/ ./templates/
-COPY main.py ./main.py
-# copy outputs dir if exists (optional)
-COPY outputs/ ./outputs/
-
-# Copy Go binary from builder (if built)
+# Copy Go core binary
 COPY --from=builder /usr/local/bin/wvs-core /usr/local/bin/wvs-core
+RUN chmod +x /usr/local/bin/wvs-core
 
-# Ensure scripts are executable
-RUN chmod +x /usr/local/bin/wvs-core || true
-
-# Switch to non-root user
+# Drop privileges
 USER wvs
-WORKDIR /home/wvs
 
-# Default entrypoint
+ENV PYTHONPATH=/opt/wvs
+WORKDIR /opt/wvs
+
+
+# Default entry
 ENTRYPOINT ["python", "-m", "pywvs"]
 CMD ["--help"]
 
