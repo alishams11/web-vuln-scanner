@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  target:
+    image: kennethreitz/httpbin
+    ports:
+      - "8081:80"
+
+  scanner:
+    build: .
+    depends_on:
+      - target
+    command: >
+      sh -c "
+      python3 -m pywvs scan
+      http://target
+      -t pywvs/templates/xss-reflected.yaml
+      -o /tmp/report.json
+      && test -f /tmp/report.json
+      "

@@ -1,0 +1,19 @@
+services:
+  target:
+    image: nginx:alpine
+    ports:
+      - "8081:80"
+    volumes:
+      - ./test_pages:/usr/share/nginx/html:ro
+
+  scanner:
+    build:
+      context: ../..
+    depends_on:
+      - target
+    command: [
+      "scan",
+      "http://target:80",
+      "-t", "pywvs/templates/xss-reflected.yaml",
+      "-o", "/tmp/report.json"
+    ]
