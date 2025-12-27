@@ -1,4 +1,4 @@
-name: CI - Lint & Test
+name: CI - Full Pipeline
 
 on:
   push:
@@ -7,41 +7,47 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # ---------- Python Lint & Test ----------
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Install Python dependencies
+      - name: Install deps
         run: |
           pip install -r requirements.txt
-          pip install flake8 pytest
+          pip install pytest flake8
 
-      - name: Run flake8 (lint)
+      - name: Lint
+        run: flake8 . --ignore=E501,W503
+
+      - name: Unit tests
+        run: pytest -v || true
+
+      - name: Docker integration test
         run: |
-          flake8 . --ignore=E501,W503
+          cd tests/integration
+          docker compose -f docker-compose.test.yml up --build --abort-on-container-exit
 
-      - name: Run pytest
-        run: |
-          pytest -v || true
+  go-build:
+    runs-on: ubuntu-latest
 
-      # ---------- Go Build ----------
-      - name: Set up Go
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Go
         uses: actions/setup-go@v5
         with:
           go-version: "1.22"
 
-      - name: Go mod tidy & build
+      - name: Build core
         run: |
           cd core-go
           go mod tidy
-          go build -v ./...
+          go build ./...
 
