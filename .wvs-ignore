@@ -1,0 +1,8 @@
+# ignore low confidence issues
+confidence:low
+
+# ignore specific rule
+rule:xss-reflected
+
+# ignore endpoint
+url:/health
