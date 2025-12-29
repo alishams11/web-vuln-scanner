@@ -6,6 +6,7 @@ from pywvs.templates.runner import TemplateScanRunner
 from pywvs.reporters.json_reporter import JSONReporter
 from pywvs.reporters.html_reporter import HTMLReporter
 from pywvs.auth.session import AuthSession
+from pywvs.exporters.elk_exporter import ELKExporter
 
 
 def main() -> None:
@@ -64,6 +65,12 @@ def main() -> None:
         help="Proxy URL (e.g. http://127.0.0.1:8080)",
     )
 
+    scan_parser.add_argument(
+    "--elk",
+    help="Export findings as JSONL for ELK (e.g. findings.jsonl)",
+    )
+
+
     args = parser.parse_args()
 
     if args.command == "scan":
@@ -105,6 +112,11 @@ def main() -> None:
         reporter.write(findings, output_path)
         print(f"[+] Scan completed. Report saved to {output_path}")
 
+
+        if args.elk:
+            elk = ELKExporter()
+            elk.export(findings, args.elk)
+            print(f"[+] ELK export written to {args.elk}")
 
 if __name__ == "__main__":
     main()
