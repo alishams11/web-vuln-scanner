@@ -1,10 +1,14 @@
 from typing import List
+from pathlib import Path
 
 from pywvs.core_runner import run_wvs_core
 from pywvs.templates.engine import TemplateEngine
 from pywvs.templates.models import Template
 from pywvs.modules.base import Finding
 from pywvs.auth.session import AuthSession
+
+from pywvs.ignore.loader import load_ignore_file
+from pywvs.ignore.matcher import is_ignored
 
 
 class TemplateScanRunner:
@@ -13,10 +17,12 @@ class TemplateScanRunner:
         self,
         concurrency: int = 1,
         auth_session: AuthSession | None = None,
+        ignore_file: str = ".wvs-ignore",
     ):
         self.concurrency = concurrency
         self.auth_session = auth_session
         self.engine = TemplateEngine()
+        self.ignore_file = ignore_file
 
     def run(self, template: Template, target: str) -> List[Finding]:
         urls: List[str] = []
@@ -73,5 +79,25 @@ class TemplateScanRunner:
             core_results=core_results,
         )
 
-        print(f"[DEBUG] Found {len(findings)} findings")
-        return findings
+        print(f"[DEBUG] Found {len(findings)} findings (before ignore)")
+
+        # 4. load ignore rules
+        ignore_path = Path(self.ignore_file)
+        ignore_rules = load_ignore_file(ignore_path)
+
+        if ignore_rules:
+            print(f"[DEBUG] Loaded {len(ignore_rules)} ignore rules from {ignore_path}")
+
+        # 5. apply ignore filtering
+        final_findings: List[Finding] = []
+        for finding in findings:
+            if is_ignored(finding, ignore_rules):
+                print(
+                    f"[DEBUG] Ignored finding {finding.id} "
+                    f"(confidence={finding.confidence})"
+                )
+                continue
+            final_findings.append(finding)
+
+        print(f"[DEBUG] Remaining {len(final_findings)} findings (after ignore)")
+        return final_findings
