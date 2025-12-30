@@ -1,3 +1,21 @@
+## [v0.3.0] - 2025-12-27
+### 🚀 Added
+- API scanning with JSON body and header injection
+- Session & authentication handling (cookie-based)
+- Polite scanning mode, custom User-Agent, proxy support
+- ELK / JSONL exporter for SIEM ingestion
+- False-positive tuning with confidence scores
+- `.wvs-ignore` file for finding whitelisting
+- Integration tests with Docker Compose
+- Extended CI: Python + Go build matrix
+
+### 🧹 Improved
+- Template scan runner with auth-aware fetching
+- Cleaner CLI flags and debug output
+
+### 🐳 DevOps
+- Multi-stage Dockerfile (Go core + Python runtime)
+
 ## [v0.2.0] - 2025-12-24
 ### 🚀 Added
 - Template-driven scanning engine (Nuclei-like YAML templates).
