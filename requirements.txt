@@ -1,2 +1,4 @@
 requests
 beautifulsoup4
+PyYAML>=6.0
+jinja2

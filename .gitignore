@@ -33,6 +33,12 @@ docker-compose.override.yml
 *.pid
 
 # Outputs
-outputs/
 screenshots/
 
+outputs/
+report.json
+report.html
+findings.jsonl
+elk-findings.jsonl
+
+.env
