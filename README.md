@@ -33,7 +33,7 @@ Inspired by modern scanners like Nuclei, this project focuses on:
 git clone https://github.com/alishams11/web-vuln-scanner.git
 cd web-vuln-scanner
 pip install -r requirements.txt
-
+'''
 Using Docker
 docker build -t pywvs .
 
@@ -47,24 +47,8 @@ python3 -m pywvs scan https://example.com \
 
 ##🧩 Templates
 
-Templates define:
-request method
-payloads
-matchers
-severity & confidence
-
-Example:
-id: xss-reflected
-severity: medium
-confidence: 0.7
-requests:
-  - method: GET
-    payloads:
-      q:
-        - "<script>alert(1)</script>"
-    matchers:
-      - type: body
-        contains: "<script>alert(1)</script>"
+Official templates:
+👉 https://github.com/alishams11/web-vuln-templates
      
  ---
  
