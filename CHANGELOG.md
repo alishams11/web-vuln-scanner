@@ -1,3 +1,22 @@
+## [v1.0.0] - 2025-12-31 🎉
+
+### Added
+- Template-driven scanning engine
+- Go-based high-performance HTTP core
+- API scanning with payload replay
+- Session & authentication profiles
+- Polite scanning mode, proxy & custom User-Agent
+- ELK / JSONL exporter
+- False-positive tuning with confidence & ignore rules
+- Docker & docker-compose integration
+- CI with Python + Go build matrix
+- External marketplace-ready templates repository
+
+### Security
+- For educational and authorized testing only
+
+### Status
+- Stable release
 ## [v0.3.0] - 2025-12-27
 ### 🚀 Added
 - API scanning with JSON body and header injection
