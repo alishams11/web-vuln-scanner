@@ -1,13 +1,14 @@
 # Web Vulnerability Scanner (pywvs)
 
-A modular, template-driven **web vulnerability scanner** designed for learning, automation, and security research.
+A modular, template-driven **web vulnerability scanner** designed for learning,
+automation, and security research.
 
-Inspired by modern scanners like Nuclei, this project focuses on:
-- clarity of architecture
-- extensibility
-- SOC / Pentest real-world workflows
+Inspired by modern scanners like **Nuclei**, with focus on:
+- Clean architecture
+- High extensibility
+- Real-world SOC / Pentest workflows
 
-> ⚠️ Educational & authorized security testing only.
+> ⚠️ For educational and **authorized security testing only**.
 
 ---
 
@@ -27,97 +28,75 @@ Inspired by modern scanners like Nuclei, this project focuses on:
 
 ## 📦 Installation
 
-### Using pip (local)
+### Local installation (pip)
 
 ```bash
 git clone https://github.com/alishams11/web-vuln-scanner.git
 cd web-vuln-scanner
 pip install -r requirements.txt
-'''
-Using Docker
-docker build -t pywvs .
+```
 
-##🚀 Quickstart
-Scan a target using a template:
+### Using Docker
+
+```bash
+docker build -t pywvs .
+```
+
+---
+
+## 🚀 Quick Start
+
+```bash
 python3 -m pywvs scan https://example.com \
   -t pywvs/templates/xss-reflected.yaml \
   -o report.json
+```
 
 ---
 
-##🧩 Templates
+## 🧩 Templates
 
-Official templates:
+Official templates repository:
 👉 https://github.com/alishams11/web-vuln-templates
-     
- ---
- 
-📌 Production-ready templates live in a separate repository:
-👉 web-vuln-templates (coming soon)
 
 ---
 
-##Ignore False Positives
-Use .wvs-ignore to suppress known findings:
-id:xss-reflected
-url:https://example.com/search
+## 🚫 Ignore False Positives
+
+```text
+id: xss-reflected
+url: https://example.com/search
+```
 
 ---
 
-##Exporting to ELK / Logstash
+## 📤 Exporting to ELK / Logstash
+
+```bash
 python examples/export_elk.py report.json > findings.jsonl
+```
 
 Compatible with:
-
-Logstash
-Elasticsearch
-OpenSearch
+- Logstash
+- Elasticsearch
+- OpenSearch
 
 ---
 
-##Reports
+## 📊 Reports
 
-Supported formats:
-JSON
-HTML
+```bash
 python examples/generate_report.py report.json
+```
 
 ---
 
-## Examples & Test Targets
+## ⚠️ Security Disclaimer
 
-OWASP Juice Shop
-
-DVWA
-
-Custom APIs
-
-See /examples directory.
+Educational and authorized testing only.
 
 ---
 
-## Security Disclaimer
+## 📜 License
 
-This tool is intended for:
-
-educational use
-
-lab environments
-
-authorized security testing only
-
-The author is not responsible for misuse.
-
----
-
-## Contributing
-
-PRs welcome 🙌
-See CONTRIBUTING.md
-
----
-
-## License
 MIT License
-
----
