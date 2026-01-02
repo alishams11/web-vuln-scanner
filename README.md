@@ -1,31 +1,68 @@
 # Web Vulnerability Scanner (pywvs)
 
-A modular, template-driven **web vulnerability scanner** designed for learning,
-automation, and security research.
+A **template-driven, detection-oriented web vulnerability scanner**
+designed for **security engineers and pentesters** who care about
+**accuracy, context, and reportable findings** — not just raw scanning.
 
-Inspired by modern scanners like **Nuclei**, with focus on:
-- Clean architecture
-- High extensibility
-- Real-world SOC / Pentest workflows
+Inspired by tools like **Nuclei**, but built with a stronger focus on:
+- Detection logic & confidence scoring
+- False-positive reduction
+- SOC / AppSec / Pentest integration workflows
 
 > ⚠️ For educational and **authorized security testing only**.
 
 ---
+##🧠 Why This Project?
 
-## ✨ Features
+Most web scanners focus on speed and volume, often producing noisy results
+that are hard to trust or report.
 
-- 🔌 Modular scanning engine
-- 📄 YAML-based vulnerability templates
-- 🧠 Confidence scoring & false-positive tuning
-- 🚫 `.wvs-ignore` support (whitelisting)
-- 📤 Export findings to JSON / ELK (JSONL)
-- 📊 HTML & JSON reports
-- 🔐 Basic authentication handling
-- 🐳 Docker-ready
-- ⚙️ CI-enabled (GitHub Actions)
+This project aims to:
+
+Bridge the gap between pentest tools and security engineering needs
+
+Provide explainable findings with evidence and confidence
+
+Support real-world workflows such as SIEM ingestion and reporting
+
+Encourage template-driven detection logic instead of hardcoded checks
 
 ---
 
+##✨ Features
+
+🔌 Modular scanning engine (extensible by design)
+
+📄 YAML-based vulnerability templates (request + matcher logic)
+
+🧠 Confidence scoring to reduce false positives
+
+🚫 .wvs-ignore support for whitelisting known issues
+
+📤 Export findings to JSON / ELK-compatible JSONL
+
+📊 HTML & JSON reports with evidence
+
+🔐 Basic authentication & session handling
+
+🐳 Docker-ready for lab and CI usage
+
+⚙️ CI-enabled (GitHub Actions)
+---
+##🏗️ High-Level Architecture
+Target URLs
+    ↓
+Core Scan Engine
+    ↓
+Template Requests (YAML)
+    ↓
+Matchers & Detection Logic
+    ↓
+Findings (severity, confidence, evidence)
+    ↓
+Reporters (JSON / HTML / ELK)
+
+---
 ## 📦 Installation
 
 ### Local installation (pip)
@@ -56,9 +93,24 @@ python3 -m pywvs scan https://example.com \
 
 ## 🧩 Templates
 
-Official templates repository:
-👉 https://github.com/alishams11/web-vuln-templates
+Detection logic is defined using YAML templates.
 
+👉Official templates repository:https://github.com/alishams11/web-vuln-templates
+Templates define:
+
+Requests to send
+
+Matchers to evaluate responses
+
+Severity and metadata
+
+This separation allows:
+
+Easier tuning
+
+Community-driven rules
+
+Clear auditability of detections
 ---
 
 ## 🚫 Ignore False Positives
@@ -96,7 +148,28 @@ python examples/generate_report.py report.json
 Educational and authorized testing only.
 
 ---
+##🧭 Roadmap (High-Level)
 
+API scanning support
+
+Advanced authentication flows
+
+Additional vulnerability templates
+
+Detection tuning & confidence improvements
+
+---
+##🎯 Intended Audience
+
+Security Engineers
+
+Application Security (AppSec)
+
+Pentesters
+
+Blue Team / SOC learners
+
+---
 ## 📜 License
 
 MIT License
