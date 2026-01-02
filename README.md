@@ -96,8 +96,9 @@ python3 -m pywvs scan https://example.com \
 
 Detection logic is defined using YAML templates.
 
-👉Official templates repository:https://github.com/alishams11/web-vuln-templates
-Templates define:
+👉 **Official templates repository:**
+https://github.com/alishams11/web-vuln-templates
+
 
 Requests to send
 
