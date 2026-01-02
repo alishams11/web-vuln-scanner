@@ -49,7 +49,8 @@ Encourage template-driven detection logic instead of hardcoded checks
 
 ⚙️ CI-enabled (GitHub Actions)
 ---
-##🏗️ High-Level Architecture
+## 🏗️ High-Level Architecture
+```text
 Target URLs
     ↓
 Core Scan Engine
@@ -61,7 +62,7 @@ Matchers & Detection Logic
 Findings (severity, confidence, evidence)
     ↓
 Reporters (JSON / HTML / ELK)
-
+```
 ---
 ## 📦 Installation
 
@@ -148,7 +149,7 @@ python examples/generate_report.py report.json
 Educational and authorized testing only.
 
 ---
-##🧭 Roadmap (High-Level)
+## 🧭 Roadmap (High-Level)
 
 API scanning support
 
@@ -159,7 +160,7 @@ Additional vulnerability templates
 Detection tuning & confidence improvements
 
 ---
-##🎯 Intended Audience
+## 🎯 Intended Audience
 
 Security Engineers
 
